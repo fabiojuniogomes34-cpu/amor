@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Pedido de Namoro</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #FFB6C1, #FF69B4);
+        overflow: hidden;
+    }
+
+    .container {
+        text-align: center;
+        color: white;
+        position: relative;
+        width: 400px;
+        height: 300px;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-top: 80px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        position: absolute;
+        transition: 0.2s;
+    }
+
+    #sim {
+        left: 120px;
+        top: 180px;
+        background-color: #FFB6C1;
+        color: white;
+    }
+
+    #nao {
+        left: 220px;
+        top: 180px;
+        background-color: #FFB6C1;
+        color: white;
+    }
+
+    canvas {
+        display: none;
+        margin-top: 20px;
+    }
+
+    .heart-particle {
+    position: fixed;
+    color: #ff4b2b; /* Cor dos corações */
+    font-size: 20px;
+    user-select: none;
+    pointer-events: none; /* Garante que o coração não atrapalhe cliques */
+    z-index: 9999;
+    animation: floatUp 2s linear forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Você aceita sair dia 09 comigo?</h1>
+
+    <button id="sim">Sim</button>
+    <button id="nao">Não</button>
+
+    <canvas id="heartCanvas" width="400" height="300"></canvas>
+</div>
+
+<script>
+const botaoNao = document.getElementById("nao");
+const botaoSim = document.getElementById("sim");
+const canvas = document.getElementById("heartCanvas");
+const ctx = canvas.getContext("2d");
+
+// Botão "Não" foge do mouse
+botaoNao.addEventListener("mouseenter", () => {
+    const container = document.querySelector(".container");
+
+    const maxX = container.clientWidth - botaoNao.offsetWidth;
+    const maxY = container.clientHeight - botaoNao.offsetHeight;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    botaoNao.style.left = x + "px";
+    botaoNao.style.top = y + "px";
+});
+
+// Clique no "Sim"
+botaoSim.addEventListener("click", () => {
+    alert("Pedido aceito! Eu te amo mellyssa!");
+
+    document.querySelector("h1").style.display = "none";
+    botaoSim.style.display = "none";
+    botaoNao.style.display = "none";
+
+    canvas.style.display = "block";
+
+    desenharCoracao();
+});
+
+// Desenhar coração (equivalente ao turtle)
+function desenharCoracao() {
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+
+    let x = 200;
+    let y = 150;
+
+    ctx.moveTo(x, y);
+
+    ctx.bezierCurveTo(x, y - 50, x - 100, y - 50, x - 100, y);
+    ctx.bezierCurveTo(x - 100, y + 80, x, y + 100, x, y + 140);
+    ctx.bezierCurveTo(x, y + 100, x + 100, y + 80, x + 100, y);
+    ctx.bezierCurveTo(x + 100, y - 50, x, y - 50, x, y);
+
+    ctx.fill();
+
+    // Texto
+    ctx.fillStyle = "white";
+    ctx.font = "bold 16px Arial";
+
+     ctx.fillText("Eu te amo mellyssa!", 100, 240);
+}
+
+document.getElementById('sim').onclick = function() {
+    // Função para criar um coração
+    for (let i = 0; i < 30; i++) { // Cria 30 corações de uma vez
+        createHeart();
+    }
+
+    // Opcional: Redirecionar após um pequeno delay para ver a animação
+    setTimeout(() => {
+        window.open('https://youtu.be/4eJFnBH-3iM?list=RD4eJFnBH-3iM&t=42', '_blank');
+    }, 1000); 
+};
+
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart-particle');
+    heart.innerHTML = '❤'; // Você pode usar outros emojis como 💕 ou 💖
+    
+    // Posição horizontal aleatória
+    heart.style.left = Math.random() * 100 + 'vw';
+    
+    // Posição vertical inicial (parte de baixo da tela)
+    heart.style.top = '100vh';
+    
+    // Tamanho aleatório para dar profundidade
+    heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+    
+    // Duração da animação aleatória (mais rápido ou mais devagar)
+    heart.style.animationDuration = Math.random() * 2 + 1 + 's';
+
+    document.body.appendChild(heart);
+
+    // Remove o elemento do HTML depois que a animação termina (3 segundos)
+    setTimeout(() => {
+        heart.remove();
+    }, 3000);
+}
+
+</script>
+
+</body>
+</html>
